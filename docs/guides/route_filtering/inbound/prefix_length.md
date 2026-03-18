@@ -81,13 +81,28 @@ Configuration examples:
     ```
 
 === "Mikrotik"
-    Mikrotik works with filter-lists, for easier readability you can use sub-filters (note this example only shows the filter lists itself):
+    Mikrotik RouterOS v6 works with filter-lists, for easier readability you can use sub-filters (note this example only shows the filter lists itself):
     ```
     /routing filter
     add action=jump chain=upstream-in-v4 jump-target=ipv4-size
     ...
     add action=reject chain=ipv4-size prefix-length=0-7
     add action=reject chain=ipv4-size prefix-length=25-32
+    ```
+
+    For RouterOS v7 you could do it this way:
+    ```
+    /routing/filter/rule
+    add chain=bgp_reject_too_specific rule="if ( afi ipv4 && dst-len > 24 ) { reject }"
+    add chain=bgp_reject_too_specific rule="if ( afi ipv6 && dst-len > 48 ) { reject }"
+    add chain=bgp_reject_too_specific rule=return comment="JUMP back to parent rule"
+
+    add chain=bgp_reject_too_large rule="if ( afi ipv4 && dst-len < 8 ) { reject }"
+    add chain=bgp_reject_too_large rule="if ( afi ipv6 && dst-len < 16 ) { reject }"
+    add chain=bgp_reject_too_large rule=return comment="JUMP back to parent rule"
+
+    add chain=DENOG-IN rule="jump bgp_reject_too_specific"
+    add chain=DENOG-IN rule="jump bgp_reject_too_large"
     ```
 
 === "BIRD 2/3"

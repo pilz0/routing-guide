@@ -5,7 +5,6 @@ tags:
   - Cisco IOS XR missing
   - Huawei VRP missing
   - Junos missing
-  - Mikrotik missing
   - Nokia SR OS missing
   - OpenBGPD missing
   - VyOS missing
@@ -120,4 +119,17 @@ With RPKI it is possible to validate the origin AS of a BGP announcement. This i
     route-map rpki permit 30
       match rpki valid
       set local-preference 200
+    ```
+
+=== "MikroTik"
+    ```
+    /routing rpki
+    add address=10.23.23.23 comment="rpki1.example.com" group=VALIDATORS port=3323 refresh-interval=20
+    add address=2001:db8::42 comment="rpki2.example.com" group=VALIDATORS port=3323 refresh-interval=20
+
+    /routing/filter/rule
+    add chain=check_rpki rule="rpki-verify VALIDATORS"
+    add chain=check_rpki rule="if (rpki invalid) { reject } else { return }"
+
+    add chain=DENOG-IN rule="jump check_rpki"
     ```

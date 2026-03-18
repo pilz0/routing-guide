@@ -4,7 +4,6 @@ tags:
   - BIRD missing
   - Cisco missing
   - Huawei VRP missing
-  - Mikrotik missing
   - Nokia SR OS missing
   - OpenBGPD missing
   - RtBrick RBFS missing
@@ -107,4 +106,14 @@ Your own networks should be stored in lists and then used in policy for external
     set policy route-map import rule 10 action deny
     set policy route-map import rule 10 match ip address prefix-list own
     set policy route-map import rule 10 match ipv6 address prefix-list own-6
+    ```
+
+=== "MikroTik"
+    ```
+    /routing/filter/rule
+    add chain=reject_own_prefixes rule="if ( afi ipv4 && dst in <PLEASE INSERT YOUR PREFIX HERE> ) { reject }"
+    add chain=reject_own_prefixes rule="if ( afi ipv6 && dst in <PLEASE INSERT YOUR PREFIX HERE> ) { reject }"
+    add chain=reject_own_prefixes rule=return comment="JUMP back to parent rule"
+
+    add chain=DENOG-IN rule="jump reject_own_prefixes"
     ```
