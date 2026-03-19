@@ -54,7 +54,7 @@ Configuration examples:
         remote-address=198.51.100.1 max-prefix-limit=1000 max-prefix-restart-time=1h
     ```
 
-    On RouterOS v7 something like  this should do:
+    On RouterOS v7 something like this should do:
     ```
     /routing/bgp/connection
     add instance=bgp-instance-1 name=HE local.role=ebgp \
@@ -63,9 +63,10 @@ Configuration examples:
         afi=ipv6 input.limit-process-routes-ipv6=1000 remote.address=2001:7f8:f2:e1::6939:1 .as=6939
     ```
     The documentation however is a bit vague:
-    "Try to limit the amount of received IPv4 routes to the specified number.
-    This number does not represent the exact number of routes going to be installed in the routing table by the peer.
-    BGP session "clear" command must be used to reset the flag if the limit is reached."
+    
+    > Try to limit the amount of received IPv4 routes to the specified number.
+    > This number does not represent the exact number of routes going to be installed in the routing table by the peer.
+    > BGP session "clear" command must be used to reset the flag if the limit is reached.
 
 === "BIRD 2/3"
     ```
