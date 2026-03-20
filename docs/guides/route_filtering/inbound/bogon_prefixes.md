@@ -490,3 +490,39 @@ In IPv6, there is a [similar list at IANA](http://www.iana.org/assignments/ipv6-
     set policy prefix-list6 special-purpose-6 rule 21 prefix fe80::/10
     set policy prefix-list6 special-purpose-6 rule 21 le 128
     ```
+
+=== "MikroTik"
+    ```
+    /routing/filter/rule
+    add chain="reject_bogon_prefixes4" rule="if ( afi ipv4 && dst in 0.0.0.0/8 ) { reject }" comment="RFC1122 'this' Network"
+    add chain="reject_bogon_prefixes4" rule="if ( afi ipv4 && dst in 10.0.0.0/8 ) { reject }" comment="RFC1918 Private"
+    add chain="reject_bogon_prefixes4" rule="if ( afi ipv4 && dst in 100.64.0.0/10 ) { reject }" comment="RFC6598 Carrier grade nat space"
+    add chain="reject_bogon_prefixes4" rule="if ( afi ipv4 && dst in 127.0.0.0/8 ) { reject }" comment="RFC1122 Loopback"
+    add chain="reject_bogon_prefixes4" rule="if ( afi ipv4 && dst in 169.254.0.0/16 ) { reject }" comment="RFC3927 Link Local"
+    add chain="reject_bogon_prefixes4" rule="if ( afi ipv4 && dst in 172.16.0.0/12 ) { reject }" comment="RFC1918 Private"
+    add chain="reject_bogon_prefixes4" rule="if ( afi ipv4 && dst in 192.0.2.0/24 ) { reject }" comment="RFC5737 Documentation TEST-NET-1"
+    add chain="reject_bogon_prefixes4" rule="if ( afi ipv4 && dst in 192.168.0.0/16 ) { reject }" comment="RFC1918 Private"
+    add chain="reject_bogon_prefixes4" rule="if ( afi ipv4 && dst in 198.18.0.0/15 ) { reject }" comment="RFC2544 Benchmarking"
+    add chain="reject_bogon_prefixes4" rule="if ( afi ipv4 && dst in 198.51.100.0/24 ) { reject }" comment="RFC5737 Documentation TEST-NET-2"
+    add chain="reject_bogon_prefixes4" rule="if ( afi ipv4 && dst in 203.0.113.0/24 ) { reject }" comment="RFC5737 Documentation TEST-NET-3"
+    add chain="reject_bogon_prefixes4" rule="if ( afi ipv4 && dst in 224.0.0.0/4 ) { reject }" comment="RFC5771 Multicast"
+    add chain="reject_bogon_prefixes4" rule="if ( afi ipv4 && dst in 240.0.0.0/4 ) { reject }" comment="RFC1112 Reserved"
+    add chain="reject_bogon_prefixes4" rule=return comment="JUMP back to parent"
+
+    add chain="reject_bogon_prefixes6" rule="if ( afi ipv6 && dst in ::/8 ) { reject }" comment="RFC4291 Loopback and more"
+    add chain="reject_bogon_prefixes6" rule="if ( afi ipv6 && dst in 0100::/64 ) { reject }" comment="RFC6666 Discard-Only Address Block"
+    add chain="reject_bogon_prefixes6" rule="if ( afi ipv6 && dst in 2001:2::/48 ) { reject }" comment="RFC5180 Benchmarking"
+    add chain="reject_bogon_prefixes6" rule="if ( afi ipv6 && dst in 2001:10::/28 ) { reject }" comment="RFC4843 ORCHID"
+    add chain="reject_bogon_prefixes6" rule="if ( afi ipv6 && dst in 2001:db8::/32 ) { reject }" comment="RFC7450 Documentation"
+    add chain="reject_bogon_prefixes6" rule="if ( afi ipv6 && dst in 3ffe::/16 ) { reject }" comment="RFC3701 old 6bone"
+    add chain="reject_bogon_prefixes6" rule="if ( afi ipv6 && dst in 3fff::/20 ) { reject }" comment="RFC9637 Documentation"
+    add chain="reject_bogon_prefixes6" rule="if ( afi ipv6 && dst in 5f00::/16 ) { reject }" comment="RFC9602 SRv6 SIDs"
+    add chain="reject_bogon_prefixes6" rule="if ( afi ipv6 && dst in fc00::/7 ) { reject }" comment="RFC4193,RFC8190 Unique-Local"
+    add chain="reject_bogon_prefixes6" rule="if ( afi ipv6 && dst in fe80::/10 ) { reject }" comment="RFC4291 Link-Local Unicast"
+    add chain="reject_bogon_prefixes6" rule="if ( afi ipv6 && dst in fec0::/10 ) { reject }" comment="RFC3879 old Site-Local Unicast"
+    add chain="reject_bogon_prefixes6" rule="if ( afi ipv6 && dst in ff00::/8 ) { reject }" comment="RFC4291 Multicast"
+    add chain="reject_bogon_prefixes6" rule=return comment="JUMP back to parent"
+
+    add chain=DENOG-IN rule="if ( afi ipv4) { jump reject_bogon_prefixes4 }"
+    add chain=DENOG-IN rule="if ( afi ipv6) { jump reject_bogon_prefixes6 }"
+    ```

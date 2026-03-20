@@ -2,7 +2,6 @@
 tags:
   - Cisco missing
   - Huawei VRP missing
-  - Mikrotik missing
   - OpenBGPD missing
   - RtBrick RBFS missing
 ---
@@ -228,4 +227,21 @@ Bogon AS are autonomous systems which are used for test or demo applications. Th
 
     set policy route-map import-all rule 100 action deny
     set policy route-map import-all rule 100 match as-path bogon-asns
+    ```
+
+=== "MikroTik"
+    ```
+    /routing/filter/num-list
+    add list=BOGON_ASNS range=0 comment="RFC7607"
+    add list=BOGON_ASNS range=23456 comment="RFC4893 AS_TRANS, 2 to 4 byte ASN migrations"
+    add list=BOGON_ASNS range=64496-64511 comment="RFC5398 documentation/example ASNs"
+    add list=BOGON_ASNS range=65536-65551 comment="RFC5398 documentation/example ASNs"
+    add list=BOGON_ASNS range=64512-65534 comment="RFC6996 private ASNs"
+    add list=BOGON_ASNS range=4200000000-4294967294 comment="RFC6996 private ASNs"
+    add list=BOGON_ASNS range=65535 comment="RFC7300 last 16 bit ASN"
+    add list=BOGON_ASNS range=4294967295 comment="RFC7300 last 32 bit ASN"
+    add list=BOGON_ASNS range=65552-131071 comment="IANA reserved ASNs"
+
+    /routing/filter/rule/
+    add chain=DENOG-IN rule="if ( bgp-as-path [[:BOGON_ASNS:]] ) { reject }"    
     ```

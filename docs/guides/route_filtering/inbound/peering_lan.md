@@ -168,4 +168,16 @@ and convert it to your router configuration.
     set policy route-map prefixes-in rule 10 match ipv6 address prefix-list ipv6-ixplans
     ```
 
+=== "MikroTik""
+    ```
+    /ip/firewall/address-list
+    add list=ixp_prefixes4 address=185.1.155.0/24 comment="LocIX DUS"
+    /ipv6/firewall/address-list
+    add list=ixp_prefixes6 address=2a0c:b641:701::/64 comment="LocIX DUS"
+
+    /routing/filter/rule
+    add chain=DENOG-IN rule="if ( afi ipv4 && dst in ixp_prefixes4 ) { reject }"
+    add chain=DENOG-IN rule="if ( afi ipv6 && dst in ixp_prefixes6 ) { reject }"
+    ```
+
 [^1]: Internet eXchange Point

@@ -2,7 +2,6 @@
 tags:
   - Arista missing
   - Huawei VRP missing
-  - Mikrotik missing
   - Nokia SR OS missing
   - OpenBGPD missing
   - RtBrick RBFS missing
@@ -156,4 +155,11 @@ On the other hand, if you want the full routing table, you should not accept any
     set policy route-map prefixes-in rule 10 action deny
     set policy route-map prefixes-in rule 10 match ip address prefix-list default-route-v4
     set policy route-map prefixes-in rule 10 match ipv6 address prefix-list default-route-v6
+    ```
+
+=== "MikroTik"
+    ```
+    /routing/filter/rule/
+    add chain=DENOG-IN rule="if ( afi ipv4 && dst == 0.0.0.0/0 ) { reject }"
+    add chain=DENOG-IN rule="if ( afi ipv6 && dst == ::/0 ) { reject }"
     ```

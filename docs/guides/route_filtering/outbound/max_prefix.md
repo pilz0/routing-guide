@@ -36,3 +36,6 @@ Configuration examples:
     ```
     set protocols bgp neighbor 198.51.100.1 address-family ipv4-unicast maximum-prefix-out 1000
     ```
+
+=== "MikroTik"
+    Doesn't seem possible as of 2026-03-19

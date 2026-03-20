@@ -1,7 +1,6 @@
 ---
 tags:
   - Huawei VRP missing
-  - Mikrotik missing
   - OpenBGPD missing
   - RtBrick RBFS missing
 ---
@@ -130,6 +129,12 @@ The AS PATH in the DFZ[^1] can become very long. At some point this can become a
           neighbor 2001:db8::1 rcf in example_in()
        address-family ipv4
           neighbor 198.51.100.1 rcf in example_in()
+    ```
+
+=== "MikroTik"
+    ```
+    /routing/filter/rule/
+    add chain=DENOG-IN rule="if ( bgp-path-len > 50 ) { reject }"
     ```
 
 [^1]: Default Free Zone
