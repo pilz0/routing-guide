@@ -1,6 +1,5 @@
 ---
 tags:
-  - Arista missing
   - BIRD missing
   - Cisco missing
   - Huawei VRP missing
@@ -12,17 +11,15 @@ tags:
 
 # Require policy to start a BGP session
 
-Some routers accept configuration commands as you type them in line by line. At others you *commit* your configuration once you have completed it.
+Some routers process configuration commands  in real time as you type them. Others require you to *commit* your configuration when you are ready, before the router will process the configuration changes you have entered.
 
-Now, if you setup a BGP session to a neighbor and the router accepts it line by line, the session will be established once "enough" configuration is entered, independent if you have completed the configuration or not.
+If you start to enter the configuration commands to setup a BGP session and the router processes the configuration commands in real time, the session will be established as soon as the minimum required configuration is entered, regardless of whether you have entered *all* the intended configuration or not.
 
-So imagine you enter the neighbors AS number and IP address and then you go for a coffee. This might be enough to establish a session. Without any filtering, you now will receive everything from that neighbor and also announce every valid prefix in your own BGP tables. Most of the times, this is not what you want.
+This can be dangerous because as soon as the minimum required configuration to establish a BGP session is entered, the session might establish. If the minimum required configuration does not include any configuration relating to filtering, you will accept all prefixes the neighbor sends to you. Vice versa, you will announce every prefix in your own BGP table to that neighbor. Most of the time, this is undesirable because you might accept invalid prefixes from the neighbor or announce prefixes which should remain internal to your network.
 
-[RFC8212](https://www.rfc-editor.org/rfc/rfc8212.html)
-requires that you *must* configure an import and an export policy (= some filtering) on any external BGP session, otherwise the session will not be initiated or accepted.
+[RFC8212](https://www.rfc-editor.org/rfc/rfc8212.html) defines a requirement for routers, that the operator *must* configure an import and an export policy on any external BGP session, before the router will establish the session.
 
-The compliance of BGP implementations to RFC8212 is tracked
-[here](https://github.com/bgp/RFC8212).
+The compliance of BGP implementations to RFC8212 is tracked in [this repository](https://github.com/bgp/RFC8212).
 
 Configuration examples:
 
@@ -48,4 +45,28 @@ Configuration examples:
 
     ```
     set protocols bgp parameters ebgp-requires-policy
+    ```
+
+=== "Arista EOS legacy"
+    ```
+    router bgp 64500
+       address-family ipv4
+          bgp missing-policy direction in action deny
+          bgp missing-policy direction out action deny
+       !
+       address-family ipv6
+          bgp missing-policy direction in action deny
+          bgp missing-policy direction out action deny
+    ```
+
+=== "Arista EOS RCF"
+    ```
+    router bgp 64500
+       address-family ipv4
+          bgp missing-policy direction in action deny
+          bgp missing-policy direction out action deny
+       !
+       address-family ipv6
+          bgp missing-policy direction in action deny
+          bgp missing-policy direction out action deny
     ```
