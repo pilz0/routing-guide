@@ -334,8 +334,8 @@ In IPv6, there is a [similar list at IANA](http://www.iana.org/assignments/ipv6-
        seq 8 permit fe80::/10
        seq 9 permit fec0::/10
        seq 10 permit ff00::/8
-       set 11 permit 3fff::/20
-       set 12 permit 5f00::/16
+       seq 11 permit 3fff::/20
+       seq 12 permit 5f00::/16
     !
     route-map example-in deny 14
        match ip address prefix-list BOGONS_v4
@@ -378,8 +378,8 @@ In IPv6, there is a [similar list at IANA](http://www.iana.org/assignments/ipv6-
        seq 8 permit fe80::/10
        seq 9 permit fec0::/10
        seq 10 permit ff00::/8
-       set 11 permit 3fff::/20
-       set 12 permit 5f00::/16
+       seq 11 permit 3fff::/20
+       seq 12 permit 5f00::/16
     !
     router general
     control-functions
